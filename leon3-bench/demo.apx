@@ -1,0 +1,46 @@
+<!DOCTYPE APX>
+<project xmlns="http://www.absint.com/apx" target="leon3" version="11.12" build="173159">
+ <options>
+  <leon3_options>
+   <data_cache>
+    <enabled>false</enabled>
+   </data_cache>
+   <general>
+    <fpu>None</fpu>
+    <multiplier>M16x16</multiplier>
+   </general>
+   <instruction_cache>
+    <enabled>false</enabled>
+   </instruction_cache>
+   <sram_memory>
+    <access_cycles>3</access_cycles>
+    <burst_cycles>3</burst_cycles>
+    <cached>false</cached>
+    <end_address>0x50000000</end_address>
+   </sram_memory>
+  </leon3_options>
+ </options>
+ <files>
+  <executables hash="3294f7238eda22bf3b36edce5e83bbbb">/homes/n0726101/assignments/leon3-bench/demo.elf</executables>
+  <ais hash="">/homes/n0726101/assignments/leon3-bench/demo.ais</ais>
+ </files>
+ <analyses>
+  <analysis enabled="true" type="wcet_analysis" id="aiT">
+   <analysis_start>simple</analysis_start>
+   <comment></comment>
+   <expected_result></expected_result>
+   <automatic_annotations></automatic_annotations>
+  </analysis>
+  <analysis enabled="true" type="wcet_analysis" id="aiT_2">
+   <analysis_start>simple_test</analysis_start>
+   <ais></ais>
+   <report></report>
+   <xml_report></xml_report>
+   <gdl></gdl>
+   <comment></comment>
+   <expected_result></expected_result>
+   <expected_result_unit>cycles</expected_result_unit>
+   <automatic_annotations></automatic_annotations>
+  </analysis>
+ </analyses>
+</project>
