@@ -1,0 +1,52 @@
+<!DOCTYPE APX>
+<project xmlns="http://www.absint.com/apx" target="leon3" version="11.12" build="173159">
+ <options>
+  <analyses_options>
+   <extract_annotations_from_source_files>true</extract_annotations_from_source_files>
+  </analyses_options>
+  <general_options>
+   <show_md5_sums>true</show_md5_sums>
+  </general_options>
+  <leon3_options>
+   <data_cache>
+    <enabled>false</enabled>
+   </data_cache>
+   <general>
+    <fpu>None</fpu>
+    <multiplier>M16x16</multiplier>
+   </general>
+   <instruction_cache>
+    <enabled>false</enabled>
+   </instruction_cache>
+   <sram_memory>
+    <access_cycles>3</access_cycles>
+    <burst_cycles>3</burst_cycles>
+    <cached>false</cached>
+    <end_address>0x50000000</end_address>
+   </sram_memory>
+  </leon3_options>
+ </options>
+ <files>
+  <executables hash="73ff1aacfe73e55450d4564c795d0e7c">/homes/n0726101/assignments/1/insertion_sort/insertion_sort.elf</executables>
+  <ais hash="">/homes/n0726101/assignments/1/insertion_sort/insertion_sort.ais</ais>
+ </files>
+ <analyses>
+  <analysis enabled="true" type="wcet_analysis" id="aiT">
+   <analysis_start>run64</analysis_start>
+   <comment></comment>
+   <expected_result></expected_result>
+   <automatic_annotations></automatic_annotations>
+  </analysis>
+  <analysis enabled="true" type="wcet_analysis" id="aiT_2">
+   <analysis_start>insertion_sort</analysis_start>
+   <ais></ais>
+   <report></report>
+   <xml_report></xml_report>
+   <gdl></gdl>
+   <comment></comment>
+   <expected_result></expected_result>
+   <expected_result_unit>cycles</expected_result_unit>
+   <automatic_annotations></automatic_annotations>
+  </analysis>
+ </analyses>
+</project>

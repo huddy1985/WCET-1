@@ -1,0 +1,41 @@
+<!DOCTYPE APX>
+<project xmlns="http://www.absint.com/apx" target="leon3" version="11.12" build="173159">
+ <options>
+  <analyses_options>
+   <extract_annotations_from_source_files>true</extract_annotations_from_source_files>
+  </analyses_options>
+  <general_options>
+   <show_md5_sums>true</show_md5_sums>
+  </general_options>
+  <leon3_options>
+   <data_cache>
+    <enabled>false</enabled>
+   </data_cache>
+   <general>
+    <fpu>None</fpu>
+    <multiplier>M16x16</multiplier>
+   </general>
+   <instruction_cache>
+    <enabled>false</enabled>
+   </instruction_cache>
+   <sram_memory>
+    <access_cycles>3</access_cycles>
+    <burst_cycles>3</burst_cycles>
+    <cached>false</cached>
+    <end_address>0x50000000</end_address>
+   </sram_memory>
+  </leon3_options>
+ </options>
+ <files>
+  <ais hash="">/homes/n0726101/assignments/1/monitor_task/monitor_task.ais</ais>
+  <executables hash="c12b37c9c3c48e8be2370dacf272f664">/homes/n0726101/assignments/1/monitor_task/monitor_task.elf</executables>
+ </files>
+ <analyses>
+  <analysis enabled="true" type="wcet_analysis" id="aiT">
+   <analysis_start>fp_radix2fft_withscaling</analysis_start>
+   <comment></comment>
+   <expected_result></expected_result>
+   <automatic_annotations></automatic_annotations>
+  </analysis>
+ </analyses>
+</project>
