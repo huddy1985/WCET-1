@@ -8,11 +8,11 @@ CC=sparc-elf-gcc
 #CC=llvm-gcc
 CFLAGS += -g -Os -mv8 -msoft-float -std=gnu99 -Wall -fgnu89-inline
 
-all: monitor_task
+all: monitor_task.elf
 
-monitor_task: $(MYOBJS) $(MYLIB)
+monitor_task.elf: $(MYOBJS) $(MYLIB)
 	$(CC) $(LDFLAGS) -o $@ $^
 
 .PHONY:clean
 clean:
-	rm -f monitor_task *.o *.i
+	rm -f monitor_task.elf *.o *.i

@@ -39,32 +39,37 @@
 /* required register values: R1 */
 void insertion_sort(int*arr, int size)
 {
-  /* ai: instruction "insertion_sort" is entered with @size = 32; */
+  /* ai: instruction "insertion_sort" is entered with @size = "%i0"; */
 
   int i,j,v;
   j = 1;
   
-  /* ai: TODO loop bound ? */
-  while (j < size)
+  
+  while (j < size) 
     {
+    	/* ai: LABEL here = "outerloop"; */
+    	/* ai: loop here MAX (@size-1); */
       v=arr[j];
       
       i = j - 1;
 
-      /* ai: TODO loop bound ? */
+      
       while (i >= 0)
         {
+        	/* ai: LABEL here = "innerloop"; */
+        	/* ai: loop here MAX (@size-2); */
           /* 'loop bound' relative to insertion_sort' */      
           
-          /*  ai: TODO flow fact */
+          /* ai?: flow (here) <= (@size * (@size-1) / 2) ("insertion_sort"); */
+          /* ai?: flow (here) <= 496 ("insertion_sort"); */
           if(arr[i]<v) break;
           arr[i+1]=arr[i];
+          /* ai: loop here MAX (@size-2); */
           i = i - 1;
         }
 
       arr[i+1]=v;
-
-      /* ai: TODO (might be necessary to repeat the loop bound of outer loop here or in assembler) */
+      /* ai: loop here MAX (@size-1); */
       j = j + 1;
     }
 }
