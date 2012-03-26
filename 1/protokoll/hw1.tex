@@ -42,51 +42,90 @@
     \item Measurements: 763 incl. function call - 70 overhead = 693 cycles
     \item Static analysis: 705 cycles
 \end{itemize}
+We used the compiler flag -O1.
 
-The difference is 12 cycles so the measurement is not far away from the static analysis.
+The difference is 12 cycles so the measurement is not far away from the static analysis. After one run we measured 1018 cycles but after reflashing the target the result was 763 cycles again.
 }
 
 \Prob{Recommended (3): Also extract the instruction trace as outlined in “Timing Analysis Lab: First Steps”. Then compare the number of cycles needed in one iteration of the loop, with the number of cycles aiT calculated.}
 
 \Quest{Do they coincide? What is the total number of cycles needed to execute simple according to the instruction trace buffer?}
 {
+To number of cycles for one iteration we measured 77 cycles. The static analysis results in 77 cycles.
 
+\lstinputlisting{../Problem2.txt}
+
+Just based on the number of instructions we calculated the number of cycles needed = 118 cycles. This is much shorter than the result of the static analysis. The reason for this is that we don't know the exact memory timing and the instruction decode takes more time. % TODO nochmal erklären warum so wenig instructions warum cycles/=cycles ist
 }
 
 \Prob{Mandatory (4): First, create a project containing the files contained in the insertion sort folder of the task specification. Now complete the function main.c:run(), executing insertion sort a few times, with array size 32 and different input data. Measure the minimum and maximum time needed to execute the sort function.}
 
 \Quest{What were the results of the measurement? How many test sets would do you need to cover all possible execution path?}
 {
+We used the compiler flag -Os.
 
+\begin{tabular}{|c|c|}
+ \hline
+ \textbf{Case} & \textbf{measurement}$[cycles]$\\ \hline
+ Best-case (pre sorted) & $3659$\\ \hline
+ Worst-case (upside down sorted)& $44267$\\ \hline
+ Average-case (unsorted) & $24875$\\ \hline
+ \hline 
+\end{tabular}
+
+With the test data $\{5,3,4\}$ all possible paths in insertion sort function are entered once. %TODO fragen ob das eh gemeint ist
 }
 
 \Prob{Mandatory (5): Add loop bounds and additional flow facts for insertion sort.c:insertion sort(), using the symbolic name @size for the size of the array to be sorted. Next, analyze the WCET of insertion sort, assuming an array size of 32. Keep the array size as a symbolic name (user register @size). Finally, write a test function which calls insertion sort more than once, with different array sizes (e.g., 16,32 and 64). Also repeat the static analysis with different array sizes.}
-{
-
-}
 
 \Quest{How many cycles do you need to execute insertion sort according to the static analysis?}
 {
-
+The static analysis resulted in $74694$ cycles.
 }
 
 \Quest{What results do you get for an array size of 8,16 or 64, using measurements and static analysis? }
 {
-
+\begin{tabular}{|c|c|c|c|}
+ \hline
+ \textbf{method} &\textbf{size 16}$[cycles]$ & \textbf{size 32}$[cycles]$ & \textbf{size 64}$[cycles]$\\ \hline
+ \textbf{measurement} & $11527$ & $34579$ & $132899$\\ \hline
+ \textbf{static} & $18232$ & $77224$ & $318088$ \\
+ \hline 
+\end{tabular}
 }
 
 \Quest{In addition to the size of the array, what other aspects of the input data might influence the WCET?}
 {
-
+The structure of the data. For instance: The worst-case occurs when the input data is sorted upside down. The best-case occurs if the input data is already sorted.
 }
 
 
 \Prob{Recommended (8 Points): Assume that your goal was to find out the WCET of task.c:task(). Before analyzing the execution time, you should answer a few basic questions about the input data for the monitoring task, and analyze the control flow on the source code level.}
 
-\Quest{What is the set of input data which might influence the execution time of the task at the software side? Is it tractable to enumerate every possible input? Which loops need to be bounded? Add all loop bounds and flow facts you can find to the file task.c (as source code annotations).}
+\Quest{What is the set of input data which might influence the execution time of the task at the software side?}
+{
+If many samples are missing the interpolation of the data has big influence on the runtime. Most of the other loops just depend on the amount of samples used for calculation but this does not depend on the input data and is determined at compile time.
+}
+
+\Quest{Is it tractable to enumerate every possible input?}
+{
+No it's not traceable. The result of the interpolation is dependent on the history of the last samples so enumerating the history and the inputs would require a huge effort.
+}
+
+\Quest{Which loops need to be bounded?}
+{
+%TODO flow in interpolation was für einen zweck hättes das hier da die schleife immer 
+\begin{itemize}
+    \item 
+\end{itemize}
+}
+
+\Quest{Add all loop bounds and flow facts you can find to the file task.c (as source code annotations).}
 {
 
 }
+
+
 
 
 \Prob{Recommended (8 Points): Analyze the fft() function called in task.c. Try to find loop bounds for the Fast Fourier Transform implementation (fixedpoint.c:fp radix2fft withscaling) first. If you have difficulties finding them, add a debug statement and run the transform with different input data sizes. Add flow constraints relating the execution frequency of the inner loops with the function’s execution frequency. Finally, try to analyze the execution time using aiT. There is already a timing measurement for the fft in the executable, so it is easy to compare the number of cycles estimated to execute the function.}
@@ -109,12 +148,15 @@ The difference is 12 cycles so the measurement is not far away from the static a
 \Quest{How much time did you spend writing annotations and analyzing the code? Was it less or more than
 you expected? How much time did you spend on this first assignment?}
 {
-
+\begin{itemize}
+    \item Mandatory Part: 6 hours
+    \item Recommended Part: 
+\end{itemize}
 }
 
 \Quest{What is the ratio between observed and actual execution time? Discuss the causes of the overestimation.}
 {
-
+% TODO wth?
 }
 
 \Quest{As you learned, sometimes it is necessary to annotate the assembler code. Why? What problems can you see because of this?}
