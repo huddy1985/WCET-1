@@ -145,7 +145,7 @@ void fp_radix2fft_withscaling(int16_t* xr, int16_t* xi,
    *  Work out the loop bounds for the FFT transform
    *  Hint: Use a debug statement to get an idea of values for q, r, L and L2 */
   for (q=1; 
-       q<=t;      /* ai: TODO: loop bound?; */
+       q<=t;      /* ai: loop here MAX @t; */
        q++) {
     L = 1; L <<= q;
     r = 1; r <<= (t-q);
@@ -153,13 +153,13 @@ void fp_radix2fft_withscaling(int16_t* xr, int16_t* xi,
     kL = 0;
         
     for (k=0;
-         k<r;  /* ai: TODO loop bound? */
+         k<r;  /* ai: loop here MAX (@n/2); */
          k++) { 
       for (j=0; 
-           j<L2; /* ai: TODO loop bound? */
+           j<L2; /* ai: loop here MAX (@n/2); */
            j++) { 
 
-        /* ai: TODO flow fact? */
+        /* ai?: TODO flow fact? */
               
         n3     = kL + j;  
         n2     = n3 + L2;

@@ -6,11 +6,11 @@ MYLIB=bench.o
 CC=sparc-elf-gcc
 CFLAGS += -g -Os -mv8 -msoft-float -std=gnu99 -Wall -fgnu89-inline
 
-all: insertion_sort $(MYLIB)
+all: insertion_sort.elf $(MYLIB)
 
-insertion_sort: main.o insertion_sort.o $(MYLIB)
+insertion_sort.elf: main.o insertion_sort.o $(MYLIB)
 	sparc-elf-gcc $(LDFLAGS) -o $@ $^
 
 .PHONY:clean
 clean:
-	rm -f insertion_sort *.o *.i
+	rm -f insertion_sort.elf *.o *.i

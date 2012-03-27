@@ -130,7 +130,7 @@ void merge_samples(input_t* in, sample_buffer_t* sbuf)
   	  int missing_samples = i - valid - 1;
   	  if(missing_samples > 0 && missing_samples <= MAX_CONSECUTIVE_MISSING)
   	  {
-            /* TODO: loop bound */
+  	  	  /* ai: loop here MAX 4 */
     		for(j = i-1;j > valid;--j)
     		{
     	      /* At most once for each invalid input sample */

@@ -1,0 +1,5 @@
+# enter AIS annotations here or use the AIS Wizard from the context menu
+
+#loop "insertion_sort"
+loop "insertion_sort" + 1 loop max 31   ;
+loop "insertion_sort" + 2 loop max 30   ;
