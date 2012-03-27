@@ -60,6 +60,7 @@ static const check_function_t checks[2] = { &check_sin, &check_square };
  * Hint: The sampler should run with ~ f*20 Hz for best results. 
  *
  */
+ 
 status_t task(input_t *input, state_t *state, const signal_spec_t* signal_spec)
 {
      static int16_t fft_r[SAMPLE_COUNT];
@@ -92,6 +93,7 @@ void init_state(state_t* st)
  * Add a list of samples to the sample buffer (at most @inputcount)
  * Interpolate missing samples if possible
  ***************************************************************************/
+ /* ai: instruction "merge_samples" is entered with @inputcount = 32; */
 void merge_samples(input_t* in, sample_buffer_t* sbuf)
 {
   int i, j, cnt, valid;
@@ -109,17 +111,19 @@ void merge_samples(input_t* in, sample_buffer_t* sbuf)
   xs = in->input_samples;
 
   for(i = valid+1;
-      i < cnt;
+      i < cnt;/* ai: loop here MAX (@inputcount+4); */
       i++)
   {
 	
   	if(i >= 0)
   	{
+  		/* ai: flow (here) <= 32 ("merge_samples"); */
   		x = xs[i];
   	    sample_buffer_set(sbuf,i,x);
   	}
   	else
   	{
+  		/* ai: flow (here) <= 4 ("merge_samples"); */
   		x = sample_buffer_get(sbuf,i);
   	}
 
@@ -130,11 +134,11 @@ void merge_samples(input_t* in, sample_buffer_t* sbuf)
   	  int missing_samples = i - valid - 1;
   	  if(missing_samples > 0 && missing_samples <= MAX_CONSECUTIVE_MISSING)
   	  {
-  	  	  /* ai: loop here MAX 4 */
+  	  	  /* ai: loop here MAX 4; */
     		for(j = i-1;j > valid;--j)
     		{
     	      /* At most once for each invalid input sample */
-    		  /* TODO: flow fact */
+    		  /* ai: flow (here) <= 32 ("merge_samples"); */
     		  sample_value_t y = sample_buffer_get(sbuf,j);
     		  if(! IS_VALUE_MISSING(y)) break;
     		  y = iinterpolate16(valid,sample_buffer_get(sbuf,valid),i,x,j);
@@ -151,6 +155,7 @@ void merge_samples(input_t* in, sample_buffer_t* sbuf)
 /****************************************************************************
  * FFT transform, N = SAMPLE_COUNT
  ***************************************************************************/
+
 status_t fft(sample_buffer_t *buf, int16_t * fft_r_out, int16_t * fft_i_out)
 {
   int i, offs;

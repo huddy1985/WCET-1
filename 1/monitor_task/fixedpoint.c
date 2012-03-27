@@ -36,6 +36,7 @@
  *
  */
 #include "fixedpoint.h"
+#include <stdio.h>
 
 const int16_t TWIDDLE_R64[64] = {
   4096,  4096,     0,  4096,  2896,     0, -2896,  4096,
@@ -137,30 +138,37 @@ void fp_radix2fft_withscaling(int16_t* xr, int16_t* xi,
   int q, j, k;
   int n1, n2, n3;
   int L, kL, r, L2;
+  //int32_t lcnt = 0;
+  //int32_t lcnt2 = 0;
+  //int32_t lcnt3 = 0;
 
   bitreverse(xr,bvr,n);
   bitreverse(xi,bvr,n);
+  
 
   /*  Assignment 1.1:
    *  Work out the loop bounds for the FFT transform
    *  Hint: Use a debug statement to get an idea of values for q, r, L and L2 */
   for (q=1; 
-       q<=t;      /* ai: loop here MAX @t; */
+       q<=t;      /* ai: loop here exactly @t; */
        q++) {
-    L = 1; L <<= q;
-    r = 1; r <<= (t-q);
+  // lcnt++;
+    L = 1 << q;
+    r = 1 << (t-q);
     L2 = L>>1;
     kL = 0;
         
     for (k=0;
          k<r;  /* ai: loop here MAX (@n/2); */
-         k++) { 
+         k++) {
+    //lcnt2++;
+    //lcnt3 = 0;
       for (j=0; 
            j<L2; /* ai: loop here MAX (@n/2); */
            j++) { 
-
-        /* ai?: TODO flow fact? */
-              
+      //lcnt3++;
+      // flow limit here is exactly 6 * (2^(1:t) * 2^(t:1)) = 192
+        /* ai: flow (here) <= 192 ("fp_radix2fft_withscaling"); */
         n3     = kL + j;  
         n2     = n3 + L2;
         n1     = L2 - 1 + j;
@@ -171,9 +179,11 @@ void fp_radix2fft_withscaling(int16_t* xr, int16_t* xi,
         xr[n3] = ((((int32_t)xr[n3])<<FP_FRAC) + tempr)>>(FP_FRAC+1);
         xi[n3] = ((((int32_t)xi[n3])<<FP_FRAC) + tempi)>>(FP_FRAC+1);
       }
+      //printf("\n**************\nlcnt3: %d\n**************\n\n", lcnt3);
       kL += L;
     }
   }
+  //printf("\n**************\nlcnt: %d, %d, %d\n**************\n\n", lcnt, lcnt2, lcnt3); 
 }
 
 /** @brief Permutation of the elements in vs for FFT 
