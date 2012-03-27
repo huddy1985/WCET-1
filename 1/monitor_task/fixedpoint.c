@@ -159,12 +159,12 @@ void fp_radix2fft_withscaling(int16_t* xr, int16_t* xi,
     kL = 0;
         
     for (k=0;
-         k<r;  /* ai: loop here MAX (@n); */
+         k<r;  /* ai: loop here MAX (@n/2); */
          k++) {
     //lcnt2++;
     //lcnt3 = 0;
       for (j=0; 
-           j<L2; /* ai: loop here MAX (@n); */
+           j<L2; /* ai: loop here MAX (@n/2); */
            j++) { 
       //lcnt3++;
       // flow limit here is exactly 6 * (2^(1:t) * 2^(t:1)) = 192
