@@ -8,6 +8,7 @@
 \usepackage{amsmath}
 \usepackage{fullpage}
 \usepackage[pdftex]{graphicx}
+\usepackage{parskip}
 
 \DeclareGraphicsExtensions{.pdf, .jpg, .tif}
 
@@ -73,7 +74,7 @@ We used the compiler flag -Os.
  \hline 
 \end{tabular}
 
-With the test data $\{5,3,4\}$ all possible paths in insertion sort function are entered once. %TODO fragen ob das eh gemeint ist
+%TODO fragen ob das eh gemeint ist
 }
 
 \Prob{Mandatory (5): Add loop bounds and additional flow facts for insertion sort.c:insertion sort(), using the symbolic name @size for the size of the array to be sorted. Next, analyze the WCET of insertion sort, assuming an array size of 32. Keep the array size as a symbolic name (user register @size). Finally, write a test function which calls insertion sort more than once, with different array sizes (e.g., 16,32 and 64). Also repeat the static analysis with different array sizes.}
@@ -109,20 +110,18 @@ If many samples are missing the interpolation of the data has big influence on t
 
 \Quest{Is it tractable to enumerate every possible input?}
 {
-No it's not traceable. The result of the interpolation is dependent on the history of the last samples so enumerating the history and the inputs would require a huge effort.
+No it's not traceable. The result of the interpolation is dependent on the history of the last samples so enumerating the history and the inputs would require many differnt testcases.
 }
 
 \Quest{Which loops need to be bounded?}
 {
 %TODO flow in interpolation was für einen zweck hättes das hier da die schleife immer 
-\begin{itemize}
-    \item 
-\end{itemize}
+The loops we found are in the merge samples function.
 }
 
 \Quest{Add all loop bounds and flow facts you can find to the file task.c (as source code annotations).}
 {
-
+\lstinputlisting[linerange=127-145,basicstyle=\footnotesize]{../monitor_task/task.c}
 }
 
 
@@ -132,12 +131,29 @@ No it's not traceable. The result of the interpolation is dependent on the histo
 
 \Quest{Compare the worst-case number of iterations for the inner loop with and without using these flow constraints. Finally, think about the complexity of calculating loop bounds for FFT.}
 {
+Comparison static analysis with measurement:
+
+\begin{tabular}{|c|c|}
+\hline
+ type & cycles \\ \hline
+ measurement & $178807$ \\ \hline
+ static with flow constraints & $160344$\\ \hline
+\end{tabular}
+
+Comparison of inner loop in fp radix2fft withscaling with/without flow constraints:
+%TODO warum nicht 192 als flow constraint
+\begin{tabular}{|c|c|}
+    \hline
+ type & cycles \\ \hline
+ static without flow constraints & $1998624$ \\ \hline
+ static with flow constraints & $79491$\\ \hline
+\end{tabular}
 
 }
 
 \Quest{Does the FFT loop bound depend on the input data?}
 {
-
+It just depends on the ammount of the input data and not the data itself.
 }
 
 \Prob{Optional Challenge (5 Bonus Points): Try to analyze the WCET of task.c:task() using aiT. If you attempt to solve this challenge, use the control flow graph and disassembling capabilities of aiT, and be sure to understand the source code you are analyzing.}
