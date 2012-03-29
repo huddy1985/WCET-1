@@ -114,17 +114,17 @@ void merge_samples(input_t* in, sample_buffer_t* sbuf)
       i < cnt;/* ai: loop here MAX (@inputcount+4); */
       i++)
   {
-	
+  	
   	if(i >= 0)
   	{
-  		/* ai: flow (here) <= 32 ("merge_samples"); */
   		x = xs[i];
-  	    sample_buffer_set(sbuf,i,x);
+  		/* ai?: flow (here) <= 32 ("merge_samples"); */
+  		sample_buffer_set(sbuf,i,x);
   	}
   	else
   	{
-  		/* ai: flow (here) <= 4 ("merge_samples"); */
   		x = sample_buffer_get(sbuf,i);
+  		/* ai?: flow (here) <= 4 ("merge_samples"); */
   	}
 
     /* If the sample is not missing, interpolate the ones before if the range is acceptable */	
@@ -134,12 +134,14 @@ void merge_samples(input_t* in, sample_buffer_t* sbuf)
   	  int missing_samples = i - valid - 1;
   	  if(missing_samples > 0 && missing_samples <= MAX_CONSECUTIVE_MISSING)
   	  {
-  	  	  /* ai: loop here MAX 4; */
+  	  	  
     		for(j = i-1;j > valid;--j)
     		{
     	      /* At most once for each invalid input sample */
-    		  /* ai: flow (here) <= 32 ("merge_samples"); */
+    		  
     		  sample_value_t y = sample_buffer_get(sbuf,j);
+    		  /* ai: loop here MAX 4; */
+    		  /* ai: flow each (here) / ("merge_samples") is max 32; */
     		  if(! IS_VALUE_MISSING(y)) break;
     		  y = iinterpolate16(valid,sample_buffer_get(sbuf,valid),i,x,j);
     		  sample_buffer_set(sbuf,j, y);

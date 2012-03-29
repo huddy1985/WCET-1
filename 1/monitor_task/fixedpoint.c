@@ -128,19 +128,22 @@ uint32_t isqrt32u(uint32_t val) {
  * adapted from: http://www.mathworks.com/products/fixed/demos.html?file=/products/demos/shipping/fixedpoint/fi_radix2fft_demo.html
  * 
  */
+
 void fp_radix2fft_withscaling(int16_t* xr, int16_t* xi,
                               const int *bvr,
                               const int16_t* wr, const int16_t* wi,
                               int n, // @n
                               int t) // @t
 {
+	/* ai: instruction "fp_radix2fft_withscaling" is entered with @n = 64; */
+/* ai: instruction "fp_radix2fft_withscaling" is entered with @t =  6; */
   int32_t tempr, tempi;
   int q, j, k;
   int n1, n2, n3;
   int L, kL, r, L2;
   //int32_t lcnt = 0;
   //int32_t lcnt2 = 0;
-  //int32_t lcnt3 = 0;
+  int32_t lcnt3 = 0;
 
   bitreverse(xr,bvr,n);
   bitreverse(xi,bvr,n);
@@ -150,7 +153,7 @@ void fp_radix2fft_withscaling(int16_t* xr, int16_t* xi,
    *  Work out the loop bounds for the FFT transform
    *  Hint: Use a debug statement to get an idea of values for q, r, L and L2 */
   for (q=1; 
-       q<=t;      /* ai: loop here exactly @t; */
+       q<=t;      /* ai: loop here MAX (@t); */
        q++) {
   // lcnt++;
     L = 1 << q;
@@ -162,13 +165,13 @@ void fp_radix2fft_withscaling(int16_t* xr, int16_t* xi,
          k<r;  /* ai: loop here MAX (@n/2); */
          k++) {
     //lcnt2++;
-    //lcnt3 = 0;
+    lcnt3 = 0;
       for (j=0; 
            j<L2; /* ai: loop here MAX (@n/2); */
            j++) { 
       //lcnt3++;
       // flow limit here is exactly 6 * (2^(1:t) * 2^(t:1)) = 192
-        /* ai: flow (here) <= 192 ("fp_radix2fft_withscaling"); */
+        /* ai?: flow (here) <= 192 ("fp_radix2fft_withscaling"); */
         n3     = kL + j;  
         n2     = n3 + L2;
         n1     = L2 - 1 + j;
