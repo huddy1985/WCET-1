@@ -118,13 +118,13 @@ void merge_samples(input_t* in, sample_buffer_t* sbuf)
   	if(i >= 0)
   	{
   		x = xs[i];
-  		/* ai?: flow (here) <= 32 ("merge_samples"); */
+  		/* ai: flow (here) <= 32 ("merge_samples"); */
   		sample_buffer_set(sbuf,i,x);
   	}
   	else
   	{
   		x = sample_buffer_get(sbuf,i);
-  		/* ai?: flow (here) <= 4 ("merge_samples"); */
+  		/* ai: flow (here) <= 4 ("merge_samples"); */
   	}
 
     /* If the sample is not missing, interpolate the ones before if the range is acceptable */	

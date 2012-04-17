@@ -61,7 +61,7 @@ void insertion_sort(int*arr, int size)
           /* 'loop bound' relative to insertion_sort' */      
           
           /* ai?: flow (here) <= (@size * (@size-1) / 2) ("insertion_sort"); */
-          /* ai?: flow (here) <= 496 ("insertion_sort"); */
+          /* ai: flow (here) <= 496 ("insertion_sort"); */
           if(arr[i]<v) break;
           arr[i+1]=arr[i];
           /* ai: loop here MAX (@size-2); */

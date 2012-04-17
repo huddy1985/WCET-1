@@ -23,9 +23,10 @@
 #1}
 
 \newcommand{\Quest}[2]{
-\noindent\emph{Q: #1}\\[0.7cm]
+\noindent\emph{Q: #1}\\[0.5cm]
 \noindent\textbf{Answer}\\
 \noindent #2
+\vspace{0.7cm}
 }
 
 \title{WCET Analysis Lab: Assignment 1}
@@ -39,24 +40,25 @@
 
 \Quest{How long does it take to execute simple once, according to measurements, and according to the static analysis?}
 {
+We used the compiler flag -O1.
 \begin{itemize}
     \item Measurements: 763 incl. function call - 70 overhead = 693 cycles
     \item Static analysis: 705 cycles
 \end{itemize}
-We used the compiler flag -O1.
 
-The difference is 12 cycles so the measurement is not far away from the static analysis. After one run we measured 1018 cycles but after reflashing the target the result was 763 cycles again.
+
+The difference is 12 cycles so the measurement is not far away from the static analysis. After one run we measured 1018 cycles but after reflashing the target the result was 763 cycles again. We can't explain this difference.
 }
 
 \Prob{Recommended (3): Also extract the instruction trace as outlined in “Timing Analysis Lab: First Steps”. Then compare the number of cycles needed in one iteration of the loop, with the number of cycles aiT calculated.}
 
 \Quest{Do they coincide? What is the total number of cycles needed to execute simple according to the instruction trace buffer?}
 {
-To number of cycles for one iteration we measured 77 cycles. The static analysis results in 77 cycles.
+%To number of cycles for one iteration we measured 77 cycles. The static analysis results in 77 cycles.
 
 \lstinputlisting{../Problem2.txt}
 
-Just based on the number of instructions we calculated the number of cycles needed = 118 cycles. This is much shorter than the result of the static analysis. The reason for this is that we don't know the exact memory timing and the instruction decode takes more time. % TODO nochmal erklären warum so wenig instructions warum cycles/=cycles ist
+Just based on the number of instructions we calculated the number of cycles needed = 118 cycles. This is much shorter than the result of the static analysis. The reason for this is that we don't know the exact memory timing and the instruction decode takes more time.
 }
 
 \Prob{Mandatory (4): First, create a project containing the files contained in the insertion sort folder of the task specification. Now complete the function main.c:run(), executing insertion sort a few times, with array size 32 and different input data. Measure the minimum and maximum time needed to execute the sort function.}
@@ -74,7 +76,7 @@ We used the compiler flag -Os.
  \hline 
 \end{tabular}
 
-%TODO fragen ob das eh gemeint ist
+To cover all possible execution paths to sort a array of 32 32 bit integers we need maximal $2^{32}*32=137438953472$ test cases.
 }
 
 \Prob{Mandatory (5): Add loop bounds and additional flow facts for insertion sort.c:insertion sort(), using the symbolic name @size for the size of the array to be sorted. Next, analyze the WCET of insertion sort, assuming an array size of 32. Keep the array size as a symbolic name (user register @size). Finally, write a test function which calls insertion sort more than once, with different array sizes (e.g., 16,32 and 64). Also repeat the static analysis with different array sizes.}
@@ -84,7 +86,7 @@ We used the compiler flag -Os.
 The static analysis resulted in $74694$ cycles.
 }
 
-\Quest{What results do you get for an array size of 8,16 or 64, using measurements and static analysis? }
+\Quest{What results do you get for an array size of 16, 32 or 64, using measurements and static analysis? }
 {
 \begin{tabular}{|c|c|c|c|}
  \hline
@@ -121,7 +123,7 @@ The loops we found are in the merge samples function.
 
 \Quest{Add all loop bounds and flow facts you can find to the file task.c (as source code annotations).}
 {
-\lstinputlisting[linerange=127-145,basicstyle=\footnotesize]{../monitor_task/task.c}
+\lstinputlisting[linerange=113-152,basicstyle=\footnotesize]{../monitor_task/task.c}
 }
 
 
@@ -141,7 +143,7 @@ Comparison static analysis with measurement:
 \end{tabular}
 
 Comparison of inner loop in fp radix2fft withscaling with/without flow constraints:
-%TODO warum nicht 192 als flow constraint
+
 \begin{tabular}{|c|c|}
     \hline
  type & cycles \\ \hline
@@ -149,11 +151,12 @@ Comparison of inner loop in fp radix2fft withscaling with/without flow constrain
  static with flow constraints & $79491$\\ \hline
 \end{tabular}
 
+Without the flow constraint the inner loops have a big impact on WCET. The reason is that each inner loop is at most executed 32 times in each interation but this number changes with every iteration. We calculated the flow contraint with  $\sum_{i=0}^{t-1} 2^i*2^{t-i}=192$ to represent this fact.
 }
 
 \Quest{Does the FFT loop bound depend on the input data?}
 {
-It just depends on the ammount of the input data and not the data itself.
+It just depends on the amount of the input data and not the data itself.
 }
 
 \Prob{Optional Challenge (5 Bonus Points): Try to analyze the WCET of task.c:task() using aiT. If you attempt to solve this challenge, use the control flow graph and disassembling capabilities of aiT, and be sure to understand the source code you are analyzing.}
@@ -166,18 +169,23 @@ you expected? How much time did you spend on this first assignment?}
 {
 \begin{itemize}
     \item Mandatory Part: 6 hours
-    \item Recommended Part: 
+    \item Recommended Part: 6 hours
+    \item Protocol: 2 hours
 \end{itemize}
+
+We wored 14 hours on this assignment. It was more than expected, because we ran into many problems which were not directly related to the given exercises (e.g. configuration errors in aiT and so on).
 }
 
-\Quest{What is the ratio between observed and actual execution time? Discuss the causes of the overestimation.}
+\Quest{What is the ratio between observed and calculated execution time? Discuss the causes of the overestimation.}
 {
-% TODO wth?
+For the static analysis we encountered a result that sometime was twice as long as our measurements. The causes of overestimation are too less restrictive loop bounds and flow annotations. The memory access times of the CPU model are a pessimistic estimation and can also be a source of overestimation.
 }
 
 \Quest{As you learned, sometimes it is necessary to annotate the assembler code. Why? What problems can you see because of this?}
 {
+The code has an other structure in assembler after the compiler has finished its optimisation. The source code annotation points to a line of code that is on another position in the assembler code. Sometimes the loop body is moved before the loop condition and then it's also hard to see where a source code annotation belongs to. 
 
+The problem of annotating the assember code is that every litte change and recompilation of a program can possibly result in totally different binaries and would require to adapt the assember annotations to this new binary.
 }
 
 

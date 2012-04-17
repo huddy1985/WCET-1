@@ -143,7 +143,7 @@ void fp_radix2fft_withscaling(int16_t* xr, int16_t* xi,
   int L, kL, r, L2;
   //int32_t lcnt = 0;
   //int32_t lcnt2 = 0;
-  int32_t lcnt3 = 0;
+  //int32_t lcnt3 = 0;
 
   bitreverse(xr,bvr,n);
   bitreverse(xi,bvr,n);
@@ -165,7 +165,7 @@ void fp_radix2fft_withscaling(int16_t* xr, int16_t* xi,
          k<r;  /* ai: loop here MAX (@n/2); */
          k++) {
     //lcnt2++;
-    lcnt3 = 0;
+    //lcnt3 = 0;
       for (j=0; 
            j<L2; /* ai: loop here MAX (@n/2); */
            j++) { 
