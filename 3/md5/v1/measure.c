@@ -31,18 +31,23 @@ static	str_sig_t	tests[] = {
   { NULL }
 };
 
+unsigned char	sig[MD5_SIZE];
+
+void call_md5(str_sig_t	*test_p,int len) {
+	md5_buffer(test_p->ss_string,len,sig);
+}
+
 /*
  * A test driver for the routine we want to analyze
  */
 void measure_md5() {
-	unsigned char	sig[MD5_SIZE];
 	char		str[33];
 	str_sig_t	*test_p = &tests[4];
 	flush_icache_blocking();
 	
 	MEASURE_START();
 	
-	md5_buffer(test_p->ss_string,strlen(test_p->ss_string),sig);
+	call_md5(test_p,strlen(test_p->ss_string));
 	
 	MEASURE_STOP();
 	
@@ -51,8 +56,7 @@ void measure_md5() {
 	if (strcmp(str, test_p->ss_sig)) 
 		printf("ERROR: Sig for '%s' is '%s' not '%s'\n", test_p->ss_string, test_p->ss_sig, str);
 	
-	printf("simple (%d.times 8xadd) estimated: %ld [incl.function call]\n",
-	       REPEAT, ELAPSED_CYCLES());
+	printf("md5 estimated: %ld [incl.function call]\n", ELAPSED_CYCLES());
 }
 
 /*
