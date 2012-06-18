@@ -54,8 +54,7 @@
 #include "md5.h"
 #include "md5_loc.h"
 
-static	char	*rcs_id =
-"$Id: md5.c,v 1.8 2010-05-07 13:58:18 gray Exp $";
+static	char	*rcs_id = "$Id: md5.c,v 1.8 2010-05-07 13:58:18 gray Exp $";
 
 /* version id for the library */
 static char *version_id = "$MD5Version: 1.0.0 November-19-1997 $";
@@ -83,7 +82,6 @@ static char *version_id = "$MD5Version: 1.0.0 November-19-1997 $";
 */
 static void process_block(md5_t *md5_p, const void *buffer, const unsigned int buf_len)
 {
-	/* ai: instruction "process_block" is entered with @SIZE = 32; */
 	md5_uint32 correct[16];
 	const void *buf_p = buffer, *end_p;
 	unsigned int words_n;
@@ -116,6 +114,8 @@ static void process_block(md5_t *md5_p, const void *buffer, const unsigned int b
 	* round of the loop.
 	*/
 	while (buf_p < end_p) {
+		/* 64/16=4 :) */
+		/* ai: loop here EXACTLY 4; */
 		md5_uint32	A_save, B_save, C_save, D_save;
 		md5_uint32	*corr_p = correct;
 		
@@ -323,7 +323,7 @@ void md5_process(md5_t *md5_p, const void *buffer, const unsigned int buf_len)
 	* from the user to fill the block.
 	*/
 	if (md5_p->md_buf_len > 0) {
-		
+		/* ai: flow (here) = 0; */
 		in_block = md5_p->md_buf_len;
 		if (in_block + len > sizeof(md5_p->md_buffer)) {
 			add = sizeof(md5_p->md_buffer) - in_block;
@@ -339,9 +339,7 @@ void md5_process(md5_t *md5_p, const void *buffer, const unsigned int buf_len)
 		if (in_block > MD5_BLOCK_SIZE) {
 			process_block (md5_p, md5_p->md_buffer, in_block & ~BLOCK_SIZE_MASK);
 			/* the regions in the following copy operation will not overlap. */
-			memcpy (md5_p->md_buffer,
-			md5_p->md_buffer + (in_block & ~BLOCK_SIZE_MASK),
-			in_block & BLOCK_SIZE_MASK);
+			memcpy (md5_p->md_buffer, md5_p->md_buffer + (in_block & ~BLOCK_SIZE_MASK),	in_block & BLOCK_SIZE_MASK);
 			md5_p->md_buf_len = in_block & BLOCK_SIZE_MASK;
 		}
 		
@@ -351,6 +349,7 @@ void md5_process(md5_t *md5_p, const void *buffer, const unsigned int buf_len)
 	
 	/* process available complete blocks right from the user buffer */
 	if (len > MD5_BLOCK_SIZE) {
+		/* ai: flow (here) = 0; */
 		process_block (md5_p, buffer, len & ~BLOCK_SIZE_MASK);
 		buffer = (const char *) buffer + (len & ~BLOCK_SIZE_MASK);
 		len &= BLOCK_SIZE_MASK;
@@ -358,6 +357,7 @@ void md5_process(md5_t *md5_p, const void *buffer, const unsigned int buf_len)
 	
 	/* copy remaining bytes into the internal buffer */
 	if (len > 0) {
+		/* ai: flow (here) = 1; */
 		memcpy (md5_p->md_buffer, buffer, len);
 		md5_p->md_buf_len = len;
 	}
@@ -408,7 +408,7 @@ void md5_finish(md5_t *md5_p, void *signature)
 	* bytes left in the buffer.  For some reason even if we are equal
 	* to the block-size, we add an addition block of pad bytes.
 	*/
-	pad = MD5_BLOCK_SIZE - (sizeof(md5_uint32) * 2) - bytes;
+	pad = MD5_BLOCK_SIZE - (sizeof(md5_uint32) * 2) - bytes;	
 	if (pad <= 0) {
 		pad += MD5_BLOCK_SIZE;
 	}
@@ -421,7 +421,7 @@ void md5_finish(md5_t *md5_p, void *signature)
 		/* some sort of padding start byte */
 		md5_p->md_buffer[bytes] = (unsigned char)0x80;
 		if (pad > 1) {
-			memset (md5_p->md_buffer + bytes + 1, 0, pad - 1);
+			memset(md5_p->md_buffer + bytes + 1, 0, pad - 1);
 		}
 		bytes += pad;
 	}
@@ -435,8 +435,7 @@ void md5_finish(md5_t *md5_p, void *signature)
 	bytes += sizeof(md5_uint32);
 	
 	/* shift the high word over by 3 and add in the top 3 bits from the low */
-	hold = SWAP((md5_p->md_total[1] << 3) |
-	((md5_p->md_total[0] & 0xE0000000) >> 29));
+	hold = SWAP((md5_p->md_total[1] << 3) |	((md5_p->md_total[0] & 0xE0000000) >> 29));
 	memcpy(md5_p->md_buffer + bytes, &hold, sizeof(md5_uint32));
 	bytes += sizeof(md5_uint32);
 	
@@ -466,11 +465,9 @@ void md5_finish(md5_t *md5_p, void *signature)
 *
 * signature - A 16 byte buffer that will contain the MD5 signature.
 */
-void	md5_buffer(const char *buffer, const unsigned int buf_len,
-void *signature)
+void md5_buffer(const char *buffer, const unsigned int buf_len, void *signature)
 {
-	/* ai: instruction "md5_buffer" is entered with @buf_len = 32; */
-	md5_t		md5;
+	md5_t md5;
 	
 	/* initialize the computation context */
 	md5_init(&md5);
@@ -503,11 +500,11 @@ void *signature)
 *
 * str_len - the length of the string.
 */
-void	md5_sig_to_string(void *signature, char *str, const int str_len)
+void md5_sig_to_string(void *signature, char *str, const int str_len)
 {
-	unsigned char	*sig_p;
-	char		*str_p, *max_p;
-	unsigned int	high, low;
+	unsigned char *sig_p;
+	char *str_p, *max_p;
+	unsigned int high, low;
 	
 	str_p = str;
 	max_p = str + str_len;
@@ -549,12 +546,12 @@ void	md5_sig_to_string(void *signature, char *str, const int str_len)
 * str - A string of charactes which _must_ be at least 32 bytes long (2
 * characters per MD5 byte).
 */
-void	md5_sig_from_string(void *signature, const char *str)
+void md5_sig_from_string(void *signature, const char *str)
 {
-	unsigned char	*sig_p;
-	const char	*str_p;
-	char		*hex;
-	unsigned int	high, low, val;
+	unsigned char *sig_p;
+	const char *str_p;
+	char *hex;
+	unsigned int high, low, val;
 	
 	hex = HEX_STRING;
 	sig_p = signature;

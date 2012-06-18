@@ -34,6 +34,7 @@ static	str_sig_t	tests[] = {
 unsigned char	sig[MD5_SIZE];
 
 void call_md5(char *test_p,int len) {
+	/* ai: instruction "md5_buffer" is entered with @buf_len = 26; */
 	md5_buffer(test_p,len,sig);
 }
 
