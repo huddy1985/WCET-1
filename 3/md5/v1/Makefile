@@ -4,7 +4,7 @@
 
 MYLIB=bench.o md5.o
 CC=sparc-elf-gcc
-CFLAGS += -g -O1 -msoft-float -mv8 -std=gnu99 -Wall -fgnu89-inline
+CFLAGS += -g -Os -msoft-float -mv8 -std=gnu99 -Wall -fgnu89-inline
 
 all: measure.elf $(MYLIB)
 

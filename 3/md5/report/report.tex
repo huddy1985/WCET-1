@@ -1,0 +1,67 @@
+\documentclass[a4paper,english,12pt,oneside]{article}
+
+\usepackage{babel}
+\usepackage{float}
+\usepackage[colorlinks,pdfpagelabels,pdfstartview = FitH,bookmarksopen = true,bookmarksnumbered = true,linkcolor = black,plainpages = false,hypertexnames = false,citecolor = black]{hyperref}
+\usepackage{listings}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{fullpage}
+\usepackage[pdftex]{graphicx}
+\usepackage{parskip}
+
+\DeclareGraphicsExtensions{.pdf, .jpg, .tif}
+
+\widowpenalty=10000
+\clubpenalty=10000
+
+\newcounter{problemcounter}
+
+\newcommand{\Prob}[1]{
+\stepcounter{problemcounter}
+\noindent\textbf{Problem \arabic{problemcounter}}\\
+#1}
+
+\newcommand{\Quest}[2]{
+\noindent\emph{Q: #1}\\[0.5cm]
+\noindent\textbf{Answer}\\
+\noindent #2
+\vspace{0.7cm}
+}
+
+\title{WCET Analysis Lab: Assignment 3}
+\author{Markus Klein\\Johannes Kasberger}
+\date{SS 2012}
+
+\begin{document}
+\maketitle
+
+\Prob{Recommended, 8 Points: As a first step, implement a test driver, which calls the chosen benchmark with different input data. Compile the test driver (using -Os), and measure the execution time. Next, add loop bounds and other flow facts to the selected benchmark, and analyze the WCET using aiT.}
+
+\Quest{Measurement Result:}
+{
+tbd
+}
+
+\Prob{Recommended, 8 Points: Next, apply the single-path transformation to this implementation. In theory, loop bounds are unnecessary for single path code, and, on a suitable platform, execution time variations should be minimal.}
+
+\Quest{Investigate whether this is the case, using the test driver developed in the previous problem, and using aiT.}
+{
+tbd
+}
+
+\Prob{Recommended, 11 Points: Next, implement a WCET-oriented solution for the given problem, which has a good worst-case performance, automatically analyzable control flow, and, assuming a suitable processor, a small execution time variance. To this end, it is acceptable to add additional parameters to functions, and to use different algorithms.}
+
+\Quest{Again, perform measurements and a WCET analysis, and summarize all collected results in a table in your report.}
+{
+tbd
+}
+
+\Prob{Recommended, 8 Points: Finally, specify the WCET of your library function (third version) as precisely as possible. Your deliverable should include the object code of the WCET-oriented solution, along with a header file which contains the function prototype, as well as your test driver and a documented .ais file for the function. Provide detailled explanations how calls to your function will influence the execution time of the program it is embedded in, how to estimate the functions execution time using measurements, and how to analyze it using aiT. We will evaluate your function (using measurements and aiT), without inspecting the code and without adding any new flow facts. Furthermore, note that in this assignment, LEON3 is synthesized with an LRU instruction cache; therefore, the execution time may vary depending on the cache state.}
+
+\Quest{tdb}
+{
+tdb
+}
+
+\end{document}
