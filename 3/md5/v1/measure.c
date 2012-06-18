@@ -33,21 +33,23 @@ static	str_sig_t	tests[] = {
 
 unsigned char	sig[MD5_SIZE];
 
-void call_md5(str_sig_t	*test_p,int len) {
-	md5_buffer(test_p->ss_string,len,sig);
+void call_md5(char *test_p,int len) {
+	md5_buffer(test_p,len,sig);
 }
 
 /*
  * A test driver for the routine we want to analyze
  */
 void measure_md5() {
-	char		str[33];
-	str_sig_t	*test_p = &tests[4];
+	char str[33];
+	str_sig_t *test_p = &tests[4];
+	int len = strlen(test_p->ss_string);
+	
 	flush_icache_blocking();
 	
 	MEASURE_START();
 	
-	call_md5(test_p,strlen(test_p->ss_string));
+	call_md5(test_p->ss_string,len);
 	
 	MEASURE_STOP();
 	
