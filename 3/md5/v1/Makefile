@@ -8,7 +8,7 @@ CFLAGS += -g -Os -msoft-float -mv8 -std=gnu99 -Wall -fgnu89-inline
 
 all: measure.elf $(MYLIB)
 
-md5.elf: measure.o $(MYLIB)
+measure.elf: measure.o $(MYLIB)
 	sparc-elf-gcc $(LDFLAGS) -o $@ $^
 
 .PHONY:clean measure

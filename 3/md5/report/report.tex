@@ -40,7 +40,13 @@
 
 \Quest{Measurement Result:}
 {
-tbd
+	Measurement: Due to prescaling, we have cycles = 4 * ticks +- 3
+Assumed Overhead : 4 (max:14, cold: 18)
+Assumed Overhead (with function call): 26 (max:30, cold: 70)
+Sig correct
+md5 estimated: 9135 [incl.function call]
+
+Static Analysis: 32316 cycles
 }
 
 \Prob{Recommended, 8 Points: Next, apply the single-path transformation to this implementation. In theory, loop bounds are unnecessary for single path code, and, on a suitable platform, execution time variations should be minimal.}

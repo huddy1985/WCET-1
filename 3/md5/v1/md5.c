@@ -50,14 +50,14 @@
 #include <string.h>
 #include <sys/types.h>
 
-#include "conf.h"
+#include "config.h"
 #include "md5.h"
 #include "md5_loc.h"
 
-static	char	*rcs_id = "$Id: md5.c,v 1.8 2010-05-07 13:58:18 gray Exp $";
+//static	char	*rcs_id = "$Id: md5.c,v 1.8 2010-05-07 13:58:18 gray Exp $";
 
 /* version id for the library */
-static char *version_id = "$MD5Version: 1.0.0 November-19-1997 $";
+//static char *version_id = "$MD5Version: 1.0.0 November-19-1997 $";
 
 /****************************** local routines *******************************/
 
@@ -114,8 +114,7 @@ static void process_block(md5_t *md5_p, const void *buffer, const unsigned int b
 	* round of the loop.
 	*/
 	while (buf_p < end_p) {
-		/* 64/16=4 :) */
-		/* ai: loop here EXACTLY 4; */
+		
 		md5_uint32	A_save, B_save, C_save, D_save;
 		md5_uint32	*corr_p = correct;
 		
@@ -123,7 +122,6 @@ static void process_block(md5_t *md5_p, const void *buffer, const unsigned int b
 		B_save = B;
 		C_save = C;
 		D_save = D;
-		
 		/*
 		* Before we start, one word to the strange constants.  They are
 		* defined in RFC 1321 as
@@ -241,19 +239,19 @@ static void md5_get_result(const md5_t *md5_p, void *result)
 	void *res_p = result;
 	
 	hold = SWAP(md5_p->md_A);
-	memcpy(res_p, &hold, sizeof(md5_uint32));
+	*(md5_uint32*)(res_p) = hold;
 	res_p = (char *)res_p + sizeof(md5_uint32);
 	
 	hold = SWAP(md5_p->md_B);
-	memcpy(res_p, &hold, sizeof(md5_uint32));
+	*(md5_uint32*)(res_p) = hold;
 	res_p = (char *)res_p + sizeof(md5_uint32);
 	
 	hold = SWAP(md5_p->md_C);
-	memcpy(res_p, &hold, sizeof(md5_uint32));
+	*(md5_uint32*)(res_p) = hold;
 	res_p = (char *)res_p + sizeof(md5_uint32);
 	
 	hold = SWAP(md5_p->md_D);
-	memcpy(res_p, &hold, sizeof(md5_uint32));
+	*(md5_uint32*)(res_p) = hold;
 }
 
 /***************************** exported routines *****************************/
@@ -289,6 +287,12 @@ void md5_init(md5_t *md5_p)
 	md5_p->md_total[1] = 0;
 	md5_p->md_buf_len = 0;
 }
+
+#define MEMCPY(dest,src,n) 				\
+do {							\
+	for (int i = 0; i < (n); i++)			\
+		*(char*)((dest)+i) = *(char*)((src)+i);	\
+}while (0)						
 
 /*
 * md5_process
@@ -332,14 +336,14 @@ void md5_process(md5_t *md5_p, const void *buffer, const unsigned int buf_len)
 			add = len;
 		}
 		
-		memcpy (md5_p->md_buffer + in_block, buffer, add);
+		MEMCPY(md5_p->md_buffer + in_block, buffer, add);
 		md5_p->md_buf_len += add;
 		in_block += add;
 		
 		if (in_block > MD5_BLOCK_SIZE) {
 			process_block (md5_p, md5_p->md_buffer, in_block & ~BLOCK_SIZE_MASK);
 			/* the regions in the following copy operation will not overlap. */
-			memcpy (md5_p->md_buffer, md5_p->md_buffer + (in_block & ~BLOCK_SIZE_MASK),	in_block & BLOCK_SIZE_MASK);
+			MEMCPY(md5_p->md_buffer, md5_p->md_buffer + (in_block & ~BLOCK_SIZE_MASK), in_block & BLOCK_SIZE_MASK);
 			md5_p->md_buf_len = in_block & BLOCK_SIZE_MASK;
 		}
 		
@@ -358,7 +362,7 @@ void md5_process(md5_t *md5_p, const void *buffer, const unsigned int buf_len)
 	/* copy remaining bytes into the internal buffer */
 	if (len > 0) {
 		/* ai: flow (here) = 1; */
-		memcpy (md5_p->md_buffer, buffer, len);
+		MEMCPY(md5_p->md_buffer, buffer, len);
 		md5_p->md_buf_len = len;
 	}
 }
@@ -421,7 +425,9 @@ void md5_finish(md5_t *md5_p, void *signature)
 		/* some sort of padding start byte */
 		md5_p->md_buffer[bytes] = (unsigned char)0x80;
 		if (pad > 1) {
-			memset(md5_p->md_buffer + bytes + 1, 0, pad - 1);
+			for(int i=0; i<pad-1; i++)
+				*(md5_p->md_buffer + bytes + 1 + i) = 0;
+			
 		}
 		bytes += pad;
 	}
@@ -431,12 +437,14 @@ void md5_finish(md5_t *md5_p, void *signature)
 	* buffer.
 	*/
 	hold = SWAP((md5_p->md_total[0] & 0x1FFFFFFF) << 3);
-	memcpy(md5_p->md_buffer + bytes, &hold, sizeof(md5_uint32));
+	*(md5_uint32*)(md5_p->md_buffer + bytes) = hold;
+	
 	bytes += sizeof(md5_uint32);
 	
 	/* shift the high word over by 3 and add in the top 3 bits from the low */
 	hold = SWAP((md5_p->md_total[1] << 3) |	((md5_p->md_total[0] & 0xE0000000) >> 29));
-	memcpy(md5_p->md_buffer + bytes, &hold, sizeof(md5_uint32));
+	
+	*(md5_uint32*)(md5_p->md_buffer + bytes) = hold;
 	bytes += sizeof(md5_uint32);
 	
 	/* process last bytes, the padding chars, and size words */

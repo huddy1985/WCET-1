@@ -81,9 +81,11 @@
  * store the swapped words in the array CORRECT_WORDS. -- Modified to
  * fix the handling of unaligned buffer spaces - Gray 7/97
  */
+ /*memcpy(c_p, b_p, sizeof(md5_uint32));       		*/
+ 
 #define OP1(a, b, c, d, b_p, c_p, s, T)				\
      do {							\
-       memcpy(c_p, b_p, sizeof(md5_uint32));       		\
+       *(md5_uint32*)(c_p) = *(md5_uint32*)(b_p);						\
        *c_p = SWAP(*c_p);					\
        a += FF (b, c, d) + *c_p + T;				\
        a = CYCLIC (a, s);					\

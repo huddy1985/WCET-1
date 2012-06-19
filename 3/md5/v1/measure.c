@@ -5,7 +5,7 @@
  */
 
 #include <stdio.h>
-
+#include <string.h>
 #include "bench.h"
 #include "md5.h"
 
@@ -58,6 +58,8 @@ void measure_md5() {
 	
 	if (strcmp(str, test_p->ss_sig)) 
 		printf("ERROR: Sig for '%s' is '%s' not '%s'\n", test_p->ss_string, test_p->ss_sig, str);
+	else
+		printf("Sig correct\n"),
 	
 	printf("md5 estimated: %ld [incl.function call]\n", ELAPSED_CYCLES());
 }
