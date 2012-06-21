@@ -1,7 +1,7 @@
 # enter AIS annotations here or use the AIS Wizard from the context menu
 
 #loop "process_block"
-loop "process_block" + 1 loop exactly 4;
+loop "process_block" + 1 loop exactly 1;
 
 #loop "md5_finish"
 loop "md5_finish" + 1 loop min 1 max 63;

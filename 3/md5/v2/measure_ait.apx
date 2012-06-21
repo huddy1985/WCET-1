@@ -1,43 +1,41 @@
 <!DOCTYPE APX>
 <project xmlns="http://www.absint.com/apx" target="leon3" version="11.12" build="173159">
- <options>
-  <analyses_options>
-   <extract_annotations_from_source_files>true</extract_annotations_from_source_files>
-   <size_limit_for_interval_sets>5</size_limit_for_interval_sets>
+ <options xmlns="http://www.absint.com/apx">
+  <analyses_options xmlns="http://www.absint.com/apx">
+   <size_limit_for_interval_sets xmlns="http://www.absint.com/apx">5</size_limit_for_interval_sets>
   </analyses_options>
-  <general_options>
-   <show_md5_sums>true</show_md5_sums>
+  <general_options xmlns="http://www.absint.com/apx">
+   <show_md5_sums xmlns="http://www.absint.com/apx">true</show_md5_sums>
   </general_options>
-  <leon3_options>
-   <data_cache>
-    <enabled>false</enabled>
+  <leon3_options xmlns="http://www.absint.com/apx">
+   <data_cache xmlns="http://www.absint.com/apx">
+    <enabled xmlns="http://www.absint.com/apx">false</enabled>
    </data_cache>
-   <general>
-    <fpu>None</fpu>
-    <multiplier>M16x16</multiplier>
+   <general xmlns="http://www.absint.com/apx">
+    <fpu xmlns="http://www.absint.com/apx">None</fpu>
+    <multiplier xmlns="http://www.absint.com/apx">M16x16</multiplier>
    </general>
-   <instruction_cache>
-    <size>1</size>
-    <ways>4</ways>
+   <instruction_cache xmlns="http://www.absint.com/apx">
+    <size xmlns="http://www.absint.com/apx">1</size>
+    <ways xmlns="http://www.absint.com/apx">4</ways>
    </instruction_cache>
-   <sram_memory>
-    <access_cycles>3</access_cycles>
-    <burst_cycles>3</burst_cycles>
-    <cached>false</cached>
-    <end_address>0x50000000</end_address>
+   <sram_memory xmlns="http://www.absint.com/apx">
+    <access_cycles xmlns="http://www.absint.com/apx">3</access_cycles>
+    <burst_cycles xmlns="http://www.absint.com/apx">3</burst_cycles>
+    <end_address xmlns="http://www.absint.com/apx">0x50000000</end_address>
    </sram_memory>
   </leon3_options>
  </options>
- <files>
-  <executables hash="c8b27808544a1b047736467e52d3fed1">/homes/n0616782/WCET/3/md5/v1/measure.elf</executables>
-  <ais hash="">/homes/n0616782/WCET/3/md5/v1/measure.ais</ais>
+ <files xmlns="http://www.absint.com/apx">
+  <executables xmlns="http://www.absint.com/apx" hash="e392a6ae1a9828936c4ff70fac449b56">/homes/n0616782/WCET/3/md5/v2/measure.elf</executables>
+  <ais xmlns="http://www.absint.com/apx" hash="5860a106e9dafa5effc37f68f21a69ae">/homes/n0616782/WCET/3/md5/v2/measure.ais</ais>
  </files>
- <analyses>
-  <analysis enabled="true" type="wcet_analysis" id="call_md5">
-   <analysis_start>call_md5</analysis_start>
-   <comment></comment>
-   <expected_result></expected_result>
-   <automatic_annotations></automatic_annotations>
+ <analyses xmlns="http://www.absint.com/apx">
+  <analysis xmlns="http://www.absint.com/apx" enabled="true" type="wcet_analysis" id="call_md5">
+   <analysis_start xmlns="http://www.absint.com/apx">call_md5</analysis_start>
+   <comment xmlns="http://www.absint.com/apx"/>
+   <expected_result xmlns="http://www.absint.com/apx"/>
+   <automatic_annotations xmlns="http://www.absint.com/apx"/>
   </analysis>
  </analyses>
 </project>

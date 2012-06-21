@@ -34,7 +34,6 @@ static	str_sig_t	tests[] = {
 unsigned char	sig[MD5_SIZE];
 
 void call_md5(char *test_p,int len) {
-	/* ai: instruction "md5_buffer" is entered with @buf_len = 26; */
 	md5_buffer(test_p,len,sig);
 }
 
@@ -43,7 +42,7 @@ void call_md5(char *test_p,int len) {
  */
 void measure_md5() {
 	char str[33];
-	str_sig_t *test_p = &tests[8];
+	str_sig_t *test_p = &tests[4];
 	int len = strlen(test_p->ss_string);
 	
 	flush_icache_blocking();

@@ -48,6 +48,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include <sys/types.h>
 
 #include "config.h"
@@ -95,6 +96,8 @@ static void process_block(md5_t *md5_p, const void *buffer, const unsigned int b
 	C = md5_p->md_C;
 	D = md5_p->md_D;
 	
+	//printf("line %d len %d\n", __LINE__,buf_len);
+	
 	/*
 	* First increment the byte count.  RFC 1321 specifies the possible
 	* length of the file up to 2^64 bits.  Here we only compute the
@@ -130,6 +133,7 @@ static void process_block(md5_t *md5_p, const void *buffer, const unsigned int b
 		*/
 		
 		/* Round 1. */
+		//printf("line %d buf_p %d\n", __LINE__,(int)buf_p);
 		OP1 (A, B, C, D, buf_p, corr_p,  7, 0xd76aa478);
 		OP1 (D, A, B, C, buf_p, corr_p, 12, 0xe8c7b756);
 		OP1 (C, D, A, B, buf_p, corr_p, 17, 0x242070db);
@@ -320,13 +324,14 @@ do {							\
 void md5_process(md5_t *md5_p, const void *buffer, const unsigned int buf_len)
 {
 	unsigned int len = buf_len;
-	unsigned int in_block, add;
 	
 	/*
 	* When we already have some bytes in our internal buffer, copy some
 	* from the user to fill the block.
 	*/
 	if (md5_p->md_buf_len > 0) {
+		unsigned int in_block, add;
+		//printf("line %d\n", __LINE__);
 		/* ai: flow (here) = 0; */
 		in_block = md5_p->md_buf_len;
 		if (in_block + len > sizeof(md5_p->md_buffer)) {
@@ -353,6 +358,7 @@ void md5_process(md5_t *md5_p, const void *buffer, const unsigned int buf_len)
 	
 	/* process available complete blocks right from the user buffer */
 	if (len > MD5_BLOCK_SIZE) {
+		//printf("line %d\n", __LINE__);
 		/* ai: flow (here) = 0; */
 		process_block (md5_p, buffer, len & ~BLOCK_SIZE_MASK);
 		buffer = (const char *) buffer + (len & ~BLOCK_SIZE_MASK);
@@ -361,6 +367,7 @@ void md5_process(md5_t *md5_p, const void *buffer, const unsigned int buf_len)
 	
 	/* copy remaining bytes into the internal buffer */
 	if (len > 0) {
+		//printf("line %d\n", __LINE__);
 		/* ai: flow (here) = 1; */
 		MEMCPY(md5_p->md_buffer, buffer, len);
 		md5_p->md_buf_len = len;
@@ -399,11 +406,13 @@ void md5_finish(md5_t *md5_p, void *signature)
 	* overflows in the lower word -- Gray 10/97.
 	*/
 	if (md5_p->md_total[0] > MAX_MD5_UINT32 - bytes) {
+		//printf("line %d\n", __LINE__);
 		md5_p->md_total[1]++;
 		md5_p->md_total[0] -= (MAX_MD5_UINT32 + 1 - bytes);
 	}
 	else {
 		md5_p->md_total[0] += bytes;
+		//printf("line %d\n", __LINE__);
 	}
 	
 	/*
@@ -414,6 +423,7 @@ void md5_finish(md5_t *md5_p, void *signature)
 	*/
 	pad = MD5_BLOCK_SIZE - (sizeof(md5_uint32) * 2) - bytes;	
 	if (pad <= 0) {
+		//printf("line %d pad %d\n", __LINE__,pad);
 		pad += MD5_BLOCK_SIZE;
 	}
 	
@@ -422,9 +432,11 @@ void md5_finish(md5_t *md5_p, void *signature)
 	* more flexible with block-sizes -- Gray 10/97.
 	*/
 	if (pad > 0) {
+		//printf("line %d pad %d\n", __LINE__,pad);
 		/* some sort of padding start byte */
 		md5_p->md_buffer[bytes] = (unsigned char)0x80;
 		if (pad > 1) {
+			//printf("line %d pad %d\n", __LINE__,pad);
 			for(int i=0; i<pad-1; i++)
 				*(md5_p->md_buffer + bytes + 1 + i) = 0;
 			
@@ -477,6 +489,7 @@ void md5_buffer(const char *buffer, const unsigned int buf_len, void *signature)
 {
 	md5_t md5;
 	
+	//printf("line %d len %d\n", __LINE__,buf_len);
 	/* initialize the computation context */
 	md5_init(&md5);
 	

@@ -87,9 +87,9 @@ static void process_block(md5_t *md5_p, const void *buffer, const unsigned int b
 	const void *buf_p = buffer;
 	md5_uint32 A, B, C, D;
 
-	if (buf_len > 64) {
+	/*if (buf_len > 64) {
 		printf("shit. %d, len %d\n", __LINE__, buf_len);
-	}
+	}*/
 
 
 
@@ -298,6 +298,15 @@ do {								\
 	}							\
 }while (0)
 
+	
+#define MEMCPY2(dest,src,n) 				\
+do {							\
+	for (int i = 0; i < (n); i++)			\
+		*(char*)((dest)+i) = *(char*)((src)+i);	\
+}while (0)
+
+md5_t tmp_md5_g3;
+	
 /*
 * md5_process
 *
@@ -341,13 +350,12 @@ void md5_process(md5_t *md5_p, const void *buffer, const unsigned int buf_len)
 	
 	in_block += len;
 
-	md5_t tmp_md5_g3;
-	MEMCPY(&tmp_md5_g3, md5_p, md5_p, sizeof(md5_t), 1, sizeof(md5_t));
+	MEMCPY2(&tmp_md5_g3, md5_p, sizeof(md5_t));
 	
 	short g3 = in_block > MD5_BLOCK_SIZE;
 	process_block(&tmp_md5_g3, md5_p->md_buffer, MD5_BLOCK_SIZE);
 	/* the regions in the following copy operation will not overlap. */
-	MEMCPY(tmp_md5_g3.md_buffer, tmp_md5_g3.md_buffer + MD5_BLOCK_SIZE, tmp_md5_g3.md_buffer + MD5_BLOCK_SIZE, MD5_BLOCK_SIZE, 1, MD5_BLOCK_SIZE);
+	MEMCPY2(tmp_md5_g3.md_buffer, tmp_md5_g3.md_buffer + MD5_BLOCK_SIZE, MD5_BLOCK_SIZE);
 	tmp_md5_g3.md_buf_len = in_block & BLOCK_SIZE_MASK;
 	MEMCPY(md5_p, &tmp_md5_g3, md5_p, sizeof(md5_t), g1 && g3, sizeof(md5_t));
 	
@@ -398,13 +406,13 @@ void md5_finish(md5_t *md5_p, void *signature)
 	* Count remaining bytes.  Modified to do this to better avoid
 	* overflows in the lower word -- Gray 10/97.
 	*/
-	if (md5_p->md_total[0] > MAX_MD5_UINT32 - bytes) {
-		md5_p->md_total[1]++;
-		md5_p->md_total[0] -= (MAX_MD5_UINT32 + 1 - bytes);
-	}
-	else {
-		md5_p->md_total[0] += bytes;
-	}
+	short g = md5_p->md_total[0] > MAX_MD5_UINT32 - bytes;
+	md5_uint32 total_1 = md5_p->md_total[1] + 1;
+	md5_uint32 total_0 = md5_p->md_total[0] - (MAX_MD5_UINT32 + 1 - bytes);
+	md5_uint32 total_10 = md5_p->md_total[1];
+ 	md5_uint32 total_00 = md5_p->md_total[0] + bytes;
+	md5_p->md_total[1] = g ?  total_1 :  total_10;
+	md5_p->md_total[0] = g ?  total_0 :  total_00;
 
 	/*
 	* Pad the buffer to the next MD5_BLOCK-byte boundary.  (RFC 1321,
@@ -412,25 +420,45 @@ void md5_finish(md5_t *md5_p, void *signature)
 	* bytes left in the buffer.  For some reason even if we are equal
 	* to the block-size, we add an addition block of pad bytes.
 	*/
+	
 	pad = MD5_BLOCK_SIZE - (sizeof(md5_uint32) * 2) - bytes;
-	if (pad <= 0) {
-		pad += MD5_BLOCK_SIZE;
-	}
-
+	
+	short g1 = pad <= 0;
+	int pad_g1 = pad + MD5_BLOCK_SIZE;
+	int pad_ng1 = pad;
+	
+	pad = g1 ? pad_g1 : pad_ng1;
+	
 	/*
 	* Modified from a fixed array to this assignment and memset to be
 	* more flexible with block-sizes -- Gray 10/97.
 	*/
-	if (pad > 0) {
-		/* some sort of padding start byte */
-		md5_p->md_buffer[bytes] = (unsigned char)0x80;
-		if (pad > 1) {
-			for(int i=0; i<pad-1; i++)
-				*(md5_p->md_buffer + bytes + 1 + i) = 0;
-
-		}
-		bytes += pad;
+	short g2 = pad > 0;
+	
+	
+	/* some sort of padding start byte */
+	unsigned char buf_g2 = (unsigned char)0x80;
+	unsigned char buf_ng2 = (unsigned char)	md5_p->md_buffer[bytes];
+	
+	md5_p->md_buffer[bytes] = g2 ? buf_g2 : buf_ng2;
+	
+	
+	char* buf_p = md5_p->md_buffer + bytes;
+	int nix = 0;
+	
+	for(int i=1; i<MD5_BLOCK_SIZE; i++) {
+		int j = i < pad ? i : nix;			
+		char g = 0;		
+		char ng = buf_p[j];		
+		char res = g2 ? g : ng;			
+		char def = buf_p[i];			
+		buf_p[i] = i < pad ? res : def;
 	}
+	
+	md5_uint32 bytes_g2 = bytes + pad;
+	md5_uint32 bytes_ng2 = bytes;
+	
+	bytes = g2 ? bytes_g2 : bytes_ng2;
 
 	/*
 	* Put the 64-bit file length in _bits_ (i.e. *8) at the end of the
@@ -447,10 +475,21 @@ void md5_finish(md5_t *md5_p, void *signature)
 	*(md5_uint32*)(md5_p->md_buffer + bytes) = hold;
 	bytes += sizeof(md5_uint32);
 
+	
+	short g3 = bytes > 64;
+	unsigned char sig_g3[MD5_SIZE];
+	unsigned char sig_ng3[MD5_SIZE];
+	
 	/* process last bytes, the padding chars, and size words */
 	process_block(md5_p, md5_p->md_buffer, MD5_BLOCK_SIZE);
+	md5_get_result(md5_p, sig_ng3);
+	
 	process_block(md5_p, md5_p->md_buffer+MD5_BLOCK_SIZE, MD5_BLOCK_SIZE);
-	md5_get_result(md5_p, signature);
+	md5_get_result(md5_p, sig_g3);
+
+	//printf("len : %d %d\n",bytes,g3);
+		
+	MEMCPY(signature, sig_g3, sig_ng3, sizeof(sig_g3), g3, sizeof(sig_g3));
 }
 
 /*
