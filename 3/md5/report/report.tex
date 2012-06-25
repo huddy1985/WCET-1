@@ -40,40 +40,47 @@
 
 \Quest{Measurement Result:}
 {
-Measurement: Due to prescaling, we have cycles = 4 * ticks +- 3
-Assumed Overhead : 4 (max:14, cold: 18)
-Assumed Overhead (with function call): 26 (max:30, cold: 70)
-Sig correct
-md5 estimated: 9135 [incl.function call]
-                   
-Static Analysis: 9265 cycles
+	Measurement: Due to prescaling, we have cycles = 4 * ticks +- 3
+	Assumed Overhead : 4 (max:14, cold: 18)
+	Assumed Overhead (with function call): 26 (max:30, cold: 70)
+	Sig correct
+	md5 estimated: 9135 [incl.function call]
+	                   
+	Static Analysis: 9266 cycles
 }
 
 \Prob{Recommended, 8 Points: Next, apply the single-path transformation to this implementation. In theory, loop bounds are unnecessary for single path code, and, on a suitable platform, execution time variations should be minimal.}
 
 \Quest{Investigate whether this is the case, using the test driver developed in the previous problem, and using aiT.}
 {
-Due to prescaling, we have cycles = 4 * ticks +- 3
-Assumed Overhead : 4 (max:14, cold: 14)
-Assumed Overhead (with function call): 26 (max:26, cold: 70)
-Sig correct
-md5 estimated: 25323 [incl.function call]
-
-Static Analysis: 42944 cycles
+	Due to prescaling, we have cycles = 4 * ticks +- 3
+	Assumed Overhead : 4 (max:14, cold: 14)
+	Assumed Overhead (with function call): 26 (max:26, cold: 70)
+	Sig correct
+	md5 estimated: 25323 [incl.function call]
+	
+	Static Analysis: 42944 cycles
 }
 
 \Prob{Recommended, 11 Points: Next, implement a WCET-oriented solution for the given problem, which has a good worst-case performance, automatically analyzable control flow, and, assuming a suitable processor, a small execution time variance. To this end, it is acceptable to add additional parameters to functions, and to use different algorithms.}
 
 \Quest{Again, perform measurements and a WCET analysis, and summarize all collected results in a table in your report.}
 {
-tbd
+	Due to prescaling, we have cycles = 4 * ticks +- 3
+	Assumed Overhead : 4 (max:14, cold: 14)
+	Assumed Overhead (with function call): 26 (max:26, cold: 70)
+	Sig correct
+	md5 estimated: 11883 [incl.function call]
+
+	
+	Static Analysis: 17778 cycles
 }
 
 \Prob{Recommended, 8 Points: Finally, specify the WCET of your library function (third version) as precisely as possible. Your deliverable should include the object code of the WCET-oriented solution, along with a header file which contains the function prototype, as well as your test driver and a documented .ais file for the function. Provide detailled explanations how calls to your function will influence the execution time of the program it is embedded in, how to estimate the functions execution time using measurements, and how to analyze it using aiT. We will evaluate your function (using measurements and aiT), without inspecting the code and without adding any new flow facts. Furthermore, note that in this assignment, LEON3 is synthesized with an LRU instruction cache; therefore, the execution time may vary depending on the cache state.}
 
 \Quest{tdb}
 {
-tdb
+	call_md5 auf adresse 4000 11a0 für cache beschreibung
 }
 
 \end{document}

@@ -15,4 +15,4 @@ measure.elf: measure.o $(MYLIB)
 clean:
 	rm -f measure.elf *.o *.i
 measure: 
-	ls
+	grmon-eval -altjtag -u -jtagdevice 1 -c ../measure_batch
