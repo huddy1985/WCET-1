@@ -63,11 +63,27 @@ void measure_md5() {
 	printf("md5 estimated: %ld [incl.function call]\n", ELAPSED_CYCLES());
 }
 
+void measure_md52() {
+	str_sig_t *test_p = &tests[8];
+	for (int i = 1; i <= 56; i++)
+	{
+		flush_icache_blocking();
+	
+		MEASURE_START();
+	
+		call_md5(test_p->ss_string,i);
+	
+		MEASURE_STOP();
+		
+		printf("%d;%ld\n", i, ELAPSED_CYCLES());
+	}
+}
+
 /*
  * The main entry point 
  */
 int main(int argc, char ** argv)
 {
   init_benchmarks(1);
-  measure_md5();
+  measure_md52();
 }
