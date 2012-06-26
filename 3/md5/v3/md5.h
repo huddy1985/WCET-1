@@ -61,6 +61,8 @@ typedef unsigned int		md5_uint32;
  * This function is used to calculate a MD5 signature for a buffer of
  * bytes of maximum length of 56 bytes. 
  *
+ * WCET: 17778 cycles
+ *
  * RETURNS:
  *
  * None.
