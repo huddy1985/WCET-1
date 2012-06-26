@@ -426,11 +426,11 @@ void md5_finish(md5_t *md5_p, void *signature)
 *
 * buffer - A buffer of bytes whose MD5 signature we are calculating.
 *
-* buf_len - The length of the buffer. Max Length 58 Bytes
+* buf_len - The length of the buffer. Max Length 56 Bytes
 *
 * signature - A 16 byte buffer that will contain the MD5 signature.
 */
-void md5_buffer_58(const char *buffer, const unsigned int buf_len, void *signature)
+void md5_buffer_56(const char *buffer, const unsigned int buf_len, void *signature)
 {
 	md5_t md5;
 

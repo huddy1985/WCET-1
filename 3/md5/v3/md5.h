@@ -59,7 +59,7 @@ typedef unsigned int		md5_uint32;
  * DESCRIPTION:
  *
  * This function is used to calculate a MD5 signature for a buffer of
- * bytes of maximum length of 58 bytes. 
+ * bytes of maximum length of 56 bytes. 
  *
  * RETURNS:
  *
@@ -69,11 +69,11 @@ typedef unsigned int		md5_uint32;
  *
  * buffer - A buffer of bytes whose MD5 signature we are calculating.
  *
- * buf_len - The length of the buffer. Max Length 58 Bytes
+ * buf_len - The length of the buffer. Max Length 56 Bytes
  *
  * signature - A 16 byte buffer that will contain the MD5 signature.
  */
-extern void md5_buffer_58(const char *buffer, const unsigned int buf_len, void *signature);
+extern void md5_buffer_56(const char *buffer, const unsigned int buf_len, void *signature);
 
 
 #endif /* ! __MD5_H__ */

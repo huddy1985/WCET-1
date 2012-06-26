@@ -49,7 +49,7 @@ typedef struct
 } md5_t;
 
 
-#define WCET_LEN 58
+#define WCET_LEN 56
 /*
  * Define my endian-ness.  Could not do in a portable manner using the
  * include files -- grumble.
