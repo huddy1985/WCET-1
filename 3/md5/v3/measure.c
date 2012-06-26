@@ -62,7 +62,7 @@ void md5_sig_to_string(void *signature, char *str, const int str_len)
 }
 
 void call_md5(char *test_p,int len) {
-	md5_buffer_58(test_p,len,sig);
+	md5_buffer_56(test_p,len,sig);
 }
 
 /*
